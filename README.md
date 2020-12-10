@@ -102,8 +102,8 @@ Answer the following questions to fill in the blanks:_
 - _Which file is the playbook? Where do you copy it? the playbook is filebeat-playbook.yml. It was copied to /etc/filebeat/filebeat.yml
 - _Which file do you update to make Ansible run the playbook on a specific machine? The file to update to make ansible run the playbook is the filebeat-playbook.yml file which is a configuration file that will be dropped into the group called elkservers when running the ansible-playbook.  How do I specify which machine to install the ELK server on versus which to install Filebeat on? In order to specify which manchine to install the ELK server on versus which to install filebeat on, when updating the host.cfg file in the ansible directory, you will need to create a new elkserver group and add the Private IP of the Elk-server to the group. Then when you configure the filebeat-playbook.yml file, you will designate the Private IP of the Elk-server in lines 1106 and 1806.
 - _Which URL do you navigate to in order to check that the ELK server is running?  http://[ELK.VM.PUBLIC.IP]:5601/app/kibana
+
 ![](Diagrams/Filebeat capture.png)
-_
 
 The commands below are will be useful to run in order to download the playbook, update the files, etc._
 
