@@ -22,20 +22,21 @@ This document contains the following details:
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
 Load balancing ensures that the application will be highly available, in addition to restricting access to the network.
-- What aspect of security do load balancers protect? Load Balancers contibutes to the availablility aspect of security. Load balancers protects applications against emerging threats.  What is the advantage of a jump box?_ Jump box provides another layer of security by preventing all azure VMs to expose to the public. it is the origination point for launching Administrative Tasks. This sets the Jump Box as a Secure Admin Workstation (SAW) before performing any task.
+Load Balancers contibutes to the availablility aspect of security. Load balancers protects applications against emerging threats.  
+Jump box provides another layer of security by preventing all azure VMs to expose to the public. it is the origination point for launching Administrative Tasks. This sets the Jump Box as a Secure Admin Workstation (SAW) before performing any task.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the logs and system traffic.
-- What does Filebeat watch for? Filebeat watches for log files and log events.
-- What does Metricbeat record? records metric and statistical data from the operating system and from services running on the server.
+Filebeat watches for log files and log events.
+Metricbeat records metric and statistical data from the operating system and from services running on the server.
 
 The configuration details of each machine may be found below.
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
-| Jump Box | Gateway      | 10.0.0.1      | Linux Ubuntu 18.04|
-| Web _1   | DVWA Server  | 10.0.0.10     | Linux Ubuntu 18.04|
-| Web_2    | DVWA Server  | 10.0.0.13     | Linux Ubuntu 18.04|
-| Elk_VM   | Elk Server   | 168.61.218.43 | Linux Ubuntu 18.04|
+| Jump Box | Gateway      | 10.0.0.9 | Linux Ubuntu 18.04|
+| Web _1   | DVWA Server  | 10.0.0.10| Linux Ubuntu 18.04|
+| Web_2    | DVWA Server  | 10.0.0.13| Linux Ubuntu 18.04|
+| Elk_VM   | Elk Server   | 10.1.0.5 | Linux Ubuntu 18.04|
 
 ### Access Policies
 
@@ -45,8 +46,7 @@ Only the Jump Box machine can accept connections from the Internet. Access to th
 - Personal IP Address
 
 Machines within the network can only be accessed by SSH.
-- Which machine did you allow to access your ELK VM? The only machine that is allowed to access the ELK VM.
-- What was its IP address? It's IP address is 10.1.0.5
+The only machine that is allowed to access the ELK VM is the Jump Box. It's IP address is 10.0.0.9
 
 A summary of the access policies in place can be found in the table below.
 
@@ -59,19 +59,17 @@ A summary of the access policies in place can be found in the table below.
 
 ### Elk Configuration              
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
-- The main advantages of automating configuration through Ansible is the ease and extremely easy learning curve. Through the use of playbooks you are able to configure multiple Machines with the use of single command after initial configuration. 
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because the main advantages of automating configuration through Ansible is the ease and extremely easy learning curve. Through the use of playbooks you are able to configure multiple Machines with the use of single command after initial configuration. 
 
 # The playbook implements the following tasks:
 
-- In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc.
+Below are some the steps of the ELK installation play. 
 
-#- Create a New VM Keep note of the Private IP (10.1.0.5) and the Public IP (168.61.218.43) you will need the Private IP to SSH into the VM and the Public IP to connect to the Kibana Portal (HTTP Site) to view all Metrics/Syslogs.
+- Create a New VM Keep note of the Private IP (10.1.0.5) and the Public IP (168.61.218.43) you will need the Private IP to SSH into the VM and the Public IP to connect to the Kibana Portal (HTTP Site) to view all Metrics/Syslogs.
 - Download and Configure the "elk-docker" container "In the hosts.conf you will need to add a new group [elkservers] and the Private IP (10.1.0.5) to the group. Then you need to create a new ansible-playbook (elk.yml) that will download, install, configures the Elk-Server to map the following ports [5601,9200], and starts the container.
 - Launch and expose the container after installing and starting the new container. You can verify that the container is up and running by SSHing into the container from your JumpBox. Once you are in the [Elk-Server] run the command [sudo docker ps]
 - Create new Inbound Security Rules to allow Ports: 5601 and 9200 "The Inbound Security Rules should allow access from your Personal Network"
  
-- 
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -79,7 +77,7 @@ The following screenshot displays the result of running `docker ps` after succes
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
-- [10.0.0.10, 10.0.0.13, 10.1.0.5]
+(10.0.0.10, 10.0.0.13)
 
 We have installed the following Beats on these machines:
 
@@ -96,15 +94,18 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the filebeat-playbook.yml and metricbeat-playbook.yml file to the /etc/ansible/filebeat/ directory.
-- Update the configuration file to include the IP OF elk server to the ElasticSearch and Kibana sections of the configuration file.
+- Update the configuration file to include the IP OF elk server on line 1106 and 1806 
+
 - Run the playbook, and navigate to Elk-server to check that the installation worked as expected.
 
 Answer the following questions to fill in the blanks:_
 - _Which file is the playbook? Where do you copy it? the playbook is filebeat-playbook.yml. It was copied to /etc/filebeat/filebeat.yml
 - _Which file do you update to make Ansible run the playbook on a specific machine? The file to update to make ansible run the playbook is the filebeat-playbook.yml file which is a configuration file that will be dropped into the group called elkservers when running the ansible-playbook.  How do I specify which machine to install the ELK server on versus which to install Filebeat on? In order to specify which manchine to install the ELK server on versus which to install filebeat on, when updating the host.cfg file in the ansible directory, you will need to create a new elkserver group and add the Private IP of the Elk-server to the group. Then when you configure the filebeat-playbook.yml file, you will designate the Private IP of the Elk-server in lines 1106 and 1806.
-- _Which URL do you navigate to in order to check that the ELK server is running?  http://[MY.VM.IP]:5601/app/kibana
+- _Which URL do you navigate to in order to check that the ELK server is running?  http://[ELK.VM.PUBLIC.IP]:5601/app/kibana
+![](Diagrams/Filebeat capture.png)
+_
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+The commands below are will be useful to run in order to download the playbook, update the files, etc._
 
 ssh azadmin@JumpBox(PrivateIP)
 sudo docker container list -a (locate your ansible container)
